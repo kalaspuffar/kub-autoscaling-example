@@ -1,0 +1,72 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: kub-autoscaling-example
+rules:
+  - apiGroups: ["*"]
+    resources: ["deployments", "deployments/scale"]
+    verbs: ["get", "list", "update"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kub-autoscaling-example
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: kub-autoscaling-example
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kub-autoscaling-example
+subjects:
+  - kind: ServiceAccount
+    name: kub-autoscaling-example
+    namespace: kube-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kub-autoscaling-example
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kub-autoscaling-example
+  template:
+    metadata:
+      labels:
+        app: kub-autoscaling-example
+    spec:
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+      serviceAccountName: kub-autoscaling-example
+      containers:
+        - name: kub-autoscaling-example
+          image: kalaspuffar/kub-autoscaling-example
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+          env:
+            - name: INTERVAL
+              value: "30"
+            - name: RABBIT_HOST
+              value: "http://172.17.0.4"
+            - name: RABBIT_USER
+              value: "user"
+            - name: RABBIT_PASS
+              value: "test123"
+            - name: AUTOSCALING
+              value: >
+                1|5|5|default|php-apache|testqueue;
+            - name: LOGS
+              value: HIGH
+            - name: SLACK_HOOK
+              value: ''
