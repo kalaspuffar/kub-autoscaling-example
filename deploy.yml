@@ -58,7 +58,7 @@ spec:
             - name: INTERVAL
               value: "30"
             - name: RABBIT_HOST
-              value: "http://172.17.0.4"
+              value: "http://172.17.0.11"
             - name: RABBIT_USER
               value: "user"
             - name: RABBIT_PASS

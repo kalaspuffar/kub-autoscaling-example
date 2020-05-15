@@ -78,7 +78,7 @@ kubectl port-forward --namespace rabbit svc/mu-rabbit-rabbitmq 15672:15672
 
 Next up we need the password to login. We can retrieve it with the command below.
 ```
-bla bla bla
+kubectl get secret --namespace rabbit mu-rabbit-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 --decode
 ```
 
 In order to build and deploy the rabbit example we will configure our docker environment, build the docker image and deploy it in our cluster.
