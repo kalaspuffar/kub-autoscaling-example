@@ -2,6 +2,11 @@
 
 An example on how to setup auto-scaling in a kubernetes cluster.
 
+Parts of this example is inspired by a kubernetes guide for horizontal auto scaling you have that guide below.
+```
+https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+```
+
 Parts of this example is inspired by this repository which shows the functionality to autoscale with a rabbitMQ queue.
 ```
 https://github.com/onfido/k8s-rabbit-pod-autoscaler
@@ -61,11 +66,6 @@ kubectl run -it --rm load-generator --image=busybox /bin/sh
 Hit enter for command prompt
 
 while true; do wget -q -O- http://php-apache; done
-```
-
-If you want to read the original guide from kubernetes you have that guide below.
-```
-https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
 ```
 
 Last example we will look into is how to scale your pods depending on a rabbitMQ queue. Creating and starting the administration GUI we can do that following the commands below.
